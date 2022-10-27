@@ -1,3 +1,5 @@
+#include <X11/XF86keysym.h> // required for laptop keys
+
 /* appearance */
 static const int sloppyfocus        = 1;  /* focus follows mouse */
 static const unsigned int borderpx  = 1;  /* border pixel of windows */
@@ -100,12 +102,29 @@ static const double accel_speed = 0.2;
 /* commands */
 static const char *termcmd[] = { "alacritty", NULL };
 static const char *menucmd[] = { "sh", "-c", "LD_LIBRARY_PATH=/home/wintermute/src/bemenu BEMENU_RENDERERS=/home/wintermute/src/bemenu bemenu-run", NULL };
+static const char *bcklcmd[2][5] = {{
+    "sudo", "light", "-A", "5", NULL},{
+    "sudo", "light", "-U", "5", NULL}};
+static const char *scrshtcmd[]  = { "flameshot", "gui", NULL };
+static const char *volume[3][5] = { {
+    "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+10%", NULL },{
+    "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-10%", NULL },{
+    "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL } };
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
 	/* modifier                  key                 function        argument */
-	{ MODKEY,                    XKB_KEY_p,          spawn,          {.v = menucmd} },
-	{ MODKEY,                    XKB_KEY_Return,     spawn,          {.v = termcmd} },
+    // laptop keys
+    { 0,              XF86XK_MonBrightnessUp,       spawn,           {.v = bcklcmd[0]} },
+    { 0,              XF86XK_MonBrightnessDown,     spawn,           {.v = bcklcmd[1]} },
+    { 0,              XF86XK_AudioRaiseVolume,      spawn,           {.v=volume[0]} },
+    { 0,              XF86XK_AudioLowerVolume,      spawn,           {.v=volume[1]} },
+    { 0,              XF86XK_AudioMute,             spawn,           {.v=volume[2]} },
+    // program hotkeys
+    { MODKEY,                    XKB_KEY_p,          spawn,          {.v = menucmd} },
+    { MODKEY,                    XKB_KEY_Return,     spawn,          {.v = termcmd} },
+	{ 0,                         XKB_KEY_Print,      spawn,          {.v = scrshtcmd } },
+    // dwl
 	{ MODKEY,                    XKB_KEY_j,          focusstack,     {.i = +1} },
 	{ MODKEY,                    XKB_KEY_k,          focusstack,     {.i = -1} },
 	{ MODKEY,                    XKB_KEY_i,          incnmaster,     {.i = +1} },
