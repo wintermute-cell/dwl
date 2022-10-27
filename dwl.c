@@ -1992,8 +1992,13 @@ setlayout(const Arg *arg)
 		return;
 	if (!arg || !arg->v || arg->v != selmon->lt[selmon->sellt])
 		selmon->sellt ^= 1;
-	if (arg && arg->v)
-		selmon->lt[selmon->sellt] = (Layout *)arg->v;
+    if (arg && arg->v) {
+        Client *c;
+        wl_list_for_each(c, &clients, link)
+            if (VISIBLEON(c, selmon))
+                c->isfloating = 0;
+        selmon->lt[selmon->sellt] = (Layout *)arg->v;
+    }
 	/* TODO change layout symbol? */
 	arrange(selmon);
 	printstatus();
