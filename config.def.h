@@ -16,6 +16,8 @@ static const float focuscolor[]     = {1.0, 0.0, 0.0, 1.0};
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]  = {0.1, 0.1, 0.1, 1.0};
 
+static const bool cursor_warp = true;
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
@@ -42,7 +44,8 @@ static const MonitorRule monrules[] = {
 	{ "eDP-1",    0.5,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL },
 	*/
 	/* defaults */
-	{ NULL,       0.55, 1,      1.4,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL },
+    { NULL,       0.55, 1,      1.4,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL },
+    { "DP-3",     0.50, 1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL },
 };
 
 /* keyboard */
