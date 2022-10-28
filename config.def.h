@@ -37,15 +37,23 @@ static const Layout layouts[] = {
 	{ "[M]",      monocle },
 };
 
-/* monitors */
-static const MonitorRule monrules[] = {
-	/* name       mfact nmaster scale layout       rotate/reflect */
 	/* example of a HiDPI laptop monitor:
-	{ "eDP-1",    0.5,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL },
-	*/
-	/* defaults */
     { NULL,       0.55, 1,      1.4,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL },
-    { "DP-3",     0.50, 1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL },
+    { "DP-3",     0.50, 1,      0.8,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL },
+	*/
+/* monitors
+ * The order in which monitors are defined determines their position.
+ * Non-configured monitors are always added to the left. */
+static const MonitorRule monrules[] = {
+	/* name       mfact nmaster scale layout       rotate/reflect x y resx resy rate adaptive custom*/
+	/* example of a HiDPI laptop monitor at 120Hz:
+	{ "eDP-1",    0.5,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 120.000, 1, 0},
+ 	*/
+
+ 	/* defaults */
+    { "DP-3",     0.50, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0,    0, 0, 0, 0, 0, 1},
+    { "eDP-1",    0.50, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 2719, 0, 0, 0, 0, 0, 1},
+	{ NULL,       0.55, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0,    0, 0, 0, 0, 0, 1},
 };
 
 /* keyboard */
