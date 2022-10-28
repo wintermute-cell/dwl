@@ -51,9 +51,9 @@ static const MonitorRule monrules[] = {
  	*/
 
  	/* defaults */
-    { "DP-3",     0.50, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0,    0, 0, 0, 0, 0, 1},
-    { "eDP-1",    0.50, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 2719, 0, 0, 0, 0, 0, 1},
-	{ NULL,       0.55, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0,    0, 0, 0, 0, 0, 1},
+    { "DP-3",     0.50, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0,    0, 0, 0, 0, 1, 0},
+    { "eDP-1",    0.50, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 2560, 0, 0, 0, 0, 1, 0},
+	{ NULL,       0.55, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0,    0, 0, 0, 0, 1, 0},
 };
 
 /* keyboard */
