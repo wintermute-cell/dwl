@@ -525,8 +525,8 @@ arrange(Monitor *m)
 		m->lt[m->sellt]->arrange(m);
 	motionnotify(0);
  	c = selclient();
-	if (cursor_warp && c)
- 		warpcursor(c);
+	//if (cursor_warp && c)
+ 	//	warpcursor(c);
 }
 
 void
