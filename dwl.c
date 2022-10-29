@@ -524,8 +524,6 @@ arrange(Monitor *m)
 		m->lt[m->sellt]->arrange(m);
 	motionnotify(0);
  	c = selclient();
-	//if (cursor_warp && c)
- 	//	warpcursor(c);
 }
 
 void
@@ -1239,9 +1237,6 @@ focusclient(Client *c, int lift)
 {
 	struct wlr_surface *old = seat->keyboard_state.focused_surface;
 	int i;
- 	/* Warp cursor to center of client if it is outside */
-	if (cursor_warp && c)
- 		warpcursor(c);
 
 	/* Raise client in stacking order if requested */
 	if (c && lift)
@@ -1342,6 +1337,9 @@ focusstack(const Arg *arg)
 				break;  /* found it */
 		}
 	}
+ 	/* Warp cursor to center of client if it is outside */
+	if (cursor_warp && c)
+ 		warpcursor(c);
 	/* If only one client is visible on selmon, then c == sel */
 	focusclient(c, 1);
 }
