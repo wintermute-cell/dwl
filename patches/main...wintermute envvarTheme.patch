@@ -1,0 +1,291 @@
+diff --git a/config.def.h b/config.def.h
+index e8f060a..feb2af8 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -2,17 +2,17 @@
+ 
+ /* appearance */
+ static const int sloppyfocus        = 1;  /* focus follows mouse */
+-static const unsigned int borderpx  = 2;  /* border pixel of windows */
++static unsigned int borderpx  = 2;  /* border pixel of windows */
+ static const int lockfullscreen     = 1;  /* 1 will force focus on the fullscreen window */
+-static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
+-static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
+-static const unsigned int gappoh    = 14;       /* horiz outer gap between windows and screen edge */
+-static const unsigned int gappov    = 14;       /* vert outer gap between windows and screen edge */
+-static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
++static unsigned int gappih    = 10;       /* horiz inner gap between windows */
++static unsigned int gappiv    = 10;       /* vert inner gap between windows */
++static unsigned int gappoh    = 14;       /* horiz outer gap between windows and screen edge */
++static unsigned int gappov    = 14;       /* vert outer gap between windows and screen edge */
++static int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
+ static const int monoclegaps        = 0;        /* 1 means outer gaps in monocle layout */
+-static const float rootcolor[]      = {0.3, 0.3, 0.3, 1.0};
+-static const float bordercolor[]    = {0.5, 0.5, 0.5, 1.0};
+-static const float focuscolor[]     = {1.0, 0.0, 0.0, 1.0};
++static float rootcolor[]      = {0.3, 0.3, 0.3, 1.0};
++static float bordercolor[]    = {0.5, 0.5, 0.5, 1.0};
++static float focuscolor[]     = {1.0, 0.0, 0.0, 1.0};
+ /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
+ static const float fullscreen_bg[]  = {0.1, 0.1, 0.1, 1.0};
+ 
+diff --git a/dwl.c b/dwl.c
+index 13c3042..64652ed 100644
+--- a/dwl.c
++++ b/dwl.c
+@@ -240,7 +240,6 @@ static void createmon(struct wl_listener *listener, void *data);
+ static void createnotify(struct wl_listener *listener, void *data);
+ static void createpointer(struct wlr_input_device *device);
+ static void cursorframe(struct wl_listener *listener, void *data);
+-static void defaultgaps(const Arg *arg);
+ static void destroydragicon(struct wl_listener *listener, void *data);
+ static void destroyidleinhibitor(struct wl_listener *listener, void *data);
+ static void destroylayersurfacenotify(struct wl_listener *listener, void *data);
+@@ -252,13 +251,6 @@ static void focusstack(const Arg *arg);
+ static Client *focustop(Monitor *m);
+ static void fullscreennotify(struct wl_listener *listener, void *data);
+ static void incnmaster(const Arg *arg);
+-static void incgaps(const Arg *arg);
+-static void incigaps(const Arg *arg);
+-static void incihgaps(const Arg *arg);
+-static void incivgaps(const Arg *arg);
+-static void incogaps(const Arg *arg);
+-static void incohgaps(const Arg *arg);
+-static void incovgaps(const Arg *arg);
+ static void inputdevice(struct wl_listener *listener, void *data);
+ static int keybinding(uint32_t mods, xkb_keysym_t sym);
+ static void keypress(struct wl_listener *listener, void *data);
+@@ -274,6 +266,7 @@ static void moveresize(const Arg *arg);
+ static void outputmgrapply(struct wl_listener *listener, void *data);
+ static void outputmgrapplyortest(struct wlr_output_configuration_v1 *config, int test);
+ static void outputmgrtest(struct wl_listener *listener, void *data);
++static void parsecolor(const char *val, float color[4]);
+ static void pointerfocus(Client *c, struct wlr_surface *surface,
+ 		double sx, double sy, uint32_t time);
+ static void printstatus(void);
+@@ -288,7 +281,6 @@ static void set_mode(struct wlr_output *output, int custom, int width, int heigh
+ static void setcursor(struct wl_listener *listener, void *data);
+ static void setfloating(Client *c, int floating);
+ static void setfullscreen(Client *c, int fullscreen);
+-static void setgaps(int oh, int ov, int ih, int iv);
+ static void setlayout(const Arg *arg);
+ static void setmfact(const Arg *arg);
+ static void setmon(Client *c, Monitor *m, unsigned int newtags);
+@@ -303,7 +295,6 @@ static void tagmon(const Arg *arg);
+ static void tile(Monitor *m);
+ static void togglefloating(const Arg *arg);
+ static void togglefullscreen(const Arg *arg);
+-static void togglegaps(const Arg *arg);
+ static void toggletag(const Arg *arg);
+ static void toggleview(const Arg *arg);
+ static void unmaplayersurfacenotify(struct wl_listener *listener, void *data);
+@@ -1177,12 +1168,6 @@ cursorframe(struct wl_listener *listener, void *data)
+ 	wlr_seat_pointer_notify_frame(seat);
+ }
+ 
+-void
+-defaultgaps(const Arg *arg)
+-{
+-	setgaps(gappoh, gappov, gappih, gappiv);
+-}
+-
+ void
+ destroydragicon(struct wl_listener *listener, void *data)
+ {
+@@ -1390,83 +1375,6 @@ incnmaster(const Arg *arg)
+ 	arrange(selmon);
+ }
+ 
+-void
+-incgaps(const Arg *arg)
+-{
+-	setgaps(
+-		selmon->gappoh + arg->i,
+-		selmon->gappov + arg->i,
+-		selmon->gappih + arg->i,
+-		selmon->gappiv + arg->i
+-	);
+-}
+-
+-void
+-incigaps(const Arg *arg)
+-{
+-	setgaps(
+-		selmon->gappoh,
+-		selmon->gappov,
+-		selmon->gappih + arg->i,
+-		selmon->gappiv + arg->i
+-	);
+-}
+-
+-void
+-incihgaps(const Arg *arg)
+-{
+-	setgaps(
+-		selmon->gappoh,
+-		selmon->gappov,
+-		selmon->gappih + arg->i,
+-		selmon->gappiv
+-	);
+-}
+-
+-void
+-incivgaps(const Arg *arg)
+-{
+-	setgaps(
+-		selmon->gappoh,
+-		selmon->gappov,
+-		selmon->gappih,
+-		selmon->gappiv + arg->i
+-	);
+-}
+-
+-void
+-incogaps(const Arg *arg)
+-{
+-	setgaps(
+-		selmon->gappoh + arg->i,
+-		selmon->gappov + arg->i,
+-		selmon->gappih,
+-		selmon->gappiv
+-	);
+-}
+-
+-void
+-incohgaps(const Arg *arg)
+-{
+-	setgaps(
+-		selmon->gappoh + arg->i,
+-		selmon->gappov,
+-		selmon->gappih,
+-		selmon->gappiv
+-	);
+-}
+-
+-void
+-incovgaps(const Arg *arg)
+-{
+-	setgaps(
+-		selmon->gappoh,
+-		selmon->gappov + arg->i,
+-		selmon->gappih,
+-		selmon->gappiv
+-	);
+-}
+-
+ void
+ inputdevice(struct wl_listener *listener, void *data)
+ {
+@@ -1578,6 +1486,53 @@ killclient(const Arg *arg)
+ 		client_send_close(sel);
+ }
+ 
++static void
++loadtheme(void)
++{
++	const char *val;
++	unsigned int tmp;
++
++    // colors
++	val = getenv("DWL_ROOT_COLOR");
++	if (val)
++		parsecolor(val, rootcolor);
++
++	val = getenv("DWL_BORDER_COLOR");
++	if (val)
++		parsecolor(val, bordercolor);
++
++	val = getenv("DWL_FOCUS_COLOR");
++	if (val)
++		parsecolor(val, focuscolor);
++
++    // border size
++	val = getenv("DWL_BORDER");
++	if (val && sscanf(val, "%u", &tmp) == 1)
++		borderpx = tmp;
++
++    // gaps
++	val = getenv("DWL_GAPPIH");
++	if (val && sscanf(val, "%u", &tmp) == 1)
++		gappih = tmp;
++
++	val = getenv("DWL_GAPPIV");
++	if (val && sscanf(val, "%u", &tmp) == 1)
++		gappiv = tmp;
++
++	val = getenv("DWL_GAPPOH");
++	if (val && sscanf(val, "%u", &tmp) == 1)
++		gappoh = tmp;
++    
++	val = getenv("DWL_GAPPOV");
++	if (val && sscanf(val, "%u", &tmp) == 1)
++		gappov = tmp;
++
++	val = getenv("DWL_SMARTGAPS");
++	if (val && sscanf(val, "%u", &tmp) == 1)
++        if (tmp == 1 || tmp == 0)
++            smartgaps = tmp;
++}
++
+ void
+ maplayersurfacenotify(struct wl_listener *listener, void *data)
+ {
+@@ -1881,6 +1836,19 @@ outputmgrtest(struct wl_listener *listener, void *data)
+ 	outputmgrapplyortest(config, 1);
+ }
+ 
++static void
++parsecolor(const char *val, float color[4])
++{
++	uint8_t r, g, b;
++	if (sscanf(val, "#%02hhx%02hhx%02hhx", &r, &g, &b) == 3) {
++		color[0] = (float)r / 0xFF;
++		color[1] = (float)g / 0xFF;
++		color[2] = (float)b / 0xFF;
++		color[3] = 1.0;
++	}
++}
++
++
+ void
+ pointerfocus(Client *c, struct wlr_surface *surface, double sx, double sy,
+ 		uint32_t time)
+@@ -2158,16 +2126,6 @@ setfullscreen(Client *c, int fullscreen)
+ 	printstatus();
+ }
+ 
+-void
+-setgaps(int oh, int ov, int ih, int iv)
+-{
+-	selmon->gappoh = MAX(oh, 0);
+-	selmon->gappov = MAX(ov, 0);
+-	selmon->gappih = MAX(ih, 0);
+-	selmon->gappiv = MAX(iv, 0);
+-	arrange(selmon);
+-}
+-
+ void
+ setlayout(const Arg *arg)
+ {
+@@ -2543,13 +2501,6 @@ togglefullscreen(const Arg *arg)
+ 		setfullscreen(sel, !sel->isfullscreen);
+ }
+ 
+-void
+-togglegaps(const Arg *arg)
+-{
+-	enablegaps = !enablegaps;
+-	arrange(selmon);
+-}
+-
+ void
+ toggletag(const Arg *arg)
+ {
+@@ -2919,6 +2870,7 @@ main(int argc, char *argv[])
+ 	/* Wayland requires XDG_RUNTIME_DIR for creating its communications socket */
+ 	if (!getenv("XDG_RUNTIME_DIR"))
+ 		die("XDG_RUNTIME_DIR must be set");
++    loadtheme();
+ 	setup();
+ 	run(startup_cmd);
+ 	cleanup();

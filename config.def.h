@@ -2,17 +2,17 @@
 
 /* appearance */
 static const int sloppyfocus        = 1;  /* focus follows mouse */
-static const unsigned int borderpx  = 2;  /* border pixel of windows */
+static unsigned int borderpx  = 2;  /* border pixel of windows */
 static const int lockfullscreen     = 1;  /* 1 will force focus on the fullscreen window */
-static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
-static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
-static const unsigned int gappoh    = 14;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 14;       /* vert outer gap between windows and screen edge */
-static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
+static unsigned int gappih    = 10;       /* horiz inner gap between windows */
+static unsigned int gappiv    = 10;       /* vert inner gap between windows */
+static unsigned int gappoh    = 14;       /* horiz outer gap between windows and screen edge */
+static unsigned int gappov    = 14;       /* vert outer gap between windows and screen edge */
+static int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int monoclegaps        = 0;        /* 1 means outer gaps in monocle layout */
-static const float rootcolor[]      = {0.3, 0.3, 0.3, 1.0};
-static const float bordercolor[]    = {0.5, 0.5, 0.5, 1.0};
-static const float focuscolor[]     = {1.0, 0.0, 0.0, 1.0};
+static float rootcolor[]      = {0.3, 0.3, 0.3, 1.0};
+static float bordercolor[]    = {0.5, 0.5, 0.5, 1.0};
+static float focuscolor[]     = {1.0, 0.0, 0.0, 1.0};
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]  = {0.1, 0.1, 0.1, 1.0};
 
