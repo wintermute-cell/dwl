@@ -9,7 +9,8 @@ static unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static unsigned int gappoh    = 14;       /* horiz outer gap between windows and screen edge */
 static unsigned int gappov    = 14;       /* vert outer gap between windows and screen edge */
 static int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
-static const int monoclegaps        = 0;        /* 1 means outer gaps in monocle layout */
+static const int monoclegaps  = 0;        /* 1 means outer gaps in monocle layout */
+static unsigned int xcursor_size = 48;    
 static float rootcolor[]      = {0.3, 0.3, 0.3, 1.0};
 static float bordercolor[]    = {0.5, 0.5, 0.5, 1.0};
 static float focuscolor[]     = {1.0, 0.0, 0.0, 1.0};
@@ -37,10 +38,6 @@ static const Layout layouts[] = {
 	{ "[M]",      monocle },
 };
 
-	/* example of a HiDPI laptop monitor:
-    { NULL,       0.55, 1,      1.4,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL },
-    { "DP-3",     0.50, 1,      0.8,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL },
-	*/
 /* monitors
  * The order in which monitors are defined determines their position.
  * Non-configured monitors are always added to the left. */
@@ -122,7 +119,7 @@ static const char *menucmd[] = { "sh", "-c", "LD_LIBRARY_PATH=/home/wintermute/s
 static const char *bcklcmd[2][5] = {{
     "sudo", "light", "-A", "5", NULL},{
     "sudo", "light", "-U", "5", NULL}};
-static const char *scrshtcmd[]  = { "flameshot", "gui", NULL };
+static const char *scrshtcmd[]  = { "grimshot", "copy", "area", NULL };
 static const char *volume[3][5] = { {
     "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+10%", NULL },{
     "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-10%", NULL },{
