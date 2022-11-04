@@ -28,6 +28,7 @@ static const Rule rules[] = {
 	{ "firefox",  NULL,       1 << 8,       0,           -1 },
 	*/
 	{ "Gimp",     NULL,       0,            0,           -1 },
+	{ NULL,      "rofi - run",0,            1,           -1 },
 };
 
 /* layout(s) */
@@ -49,7 +50,7 @@ static const MonitorRule monrules[] = {
 
  	/* defaults */
     { "DP-3",     0.50, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0,    0, 0, 0, 0, 1, 0},
-    { "eDP-1",    0.50, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 2560, 0, 0, 0, 0, 1, 0},
+    { "eDP-1",    0.50, 1,      1.5,  &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 2560, 0, 0, 0, 0, 1, 0},
 	{ NULL,       0.55, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0,    0, 0, 0, 0, 1, 0},
 };
 
@@ -115,7 +116,8 @@ static const double accel_speed = 0.2;
 
 /* commands */
 static const char *termcmd[] = { "alacritty", NULL };
-static const char *menucmd[] = { "sh", "-c", "LD_LIBRARY_PATH=/home/wintermute/src/bemenu BEMENU_RENDERERS=/home/wintermute/src/bemenu bemenu-run", NULL };
+//static const char *menucmd[] = { "sh", "-c", "LD_LIBRARY_PATH=/home/wintermute/src/bemenu BEMENU_RENDERERS=/home/wintermute/src/bemenu bemenu-run", NULL };
+static const char *menucmd[] = { "rofi", "-show", "run", NULL };
 static const char *bcklcmd[2][5] = {{
     "sudo", "light", "-A", "5", NULL},{
     "sudo", "light", "-U", "5", NULL}};
