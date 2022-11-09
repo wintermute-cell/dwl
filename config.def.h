@@ -23,12 +23,14 @@ static const bool cursor_warp = true;
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 static const Rule rules[] = {
-	/* app_id     title       tags mask     isfloating   monitor */
+	/* app_id     title       tags mask     isfloating  isterm  noswallow  monitor */
 	/* examples:
-	{ "firefox",  NULL,       1 << 8,       0,           -1 },
+	{ "Gimp",     NULL,       0,            1,          0,      1,         -1 },
+	{ "firefox",  NULL,       1 << 8,       0,          0,      1,         -1 },
 	*/
-	{ "Gimp",     NULL,       0,            0,           -1 },
-	{ NULL,      "rofi - run",0,            1,           -1 },
+	{ "Gimp",     NULL,       0,            0,          0,      1,         -1 },
+	{ NULL,      "rofi - run",0,            1,          0,      1,         -1 },
+	{ "Alacritty",NULL,       0,            0,          1,      1,         -1 },
 };
 
 /* layout(s) */
@@ -147,7 +149,7 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_d,          incnmaster,     {.i = -1} },
 	{ MODKEY,                    XKB_KEY_h,          setmfact,       {.f = -0.05} },
 	{ MODKEY,                    XKB_KEY_l,          setmfact,       {.f = +0.05} },
-	{ MODKEY,                    XKB_KEY_Return,     zoom,           {0} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     zoom,           {0} },
 	{ MODKEY,                    XKB_KEY_Tab,        view,           {0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_C,          killclient,     {0} },
 	{ MODKEY,                    XKB_KEY_t,          setlayout,      {.v = &layouts[0]} },
