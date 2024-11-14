@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
-  preBuild = ''
+  postPatch = ''
     cp config.def.h config.h
   '';
 
