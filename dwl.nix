@@ -49,10 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
-  postPatch = ''
-    cp config.def.h config.h
-  '';
-
   outputs = [ "out" "man" ];
 
   makeFlags = [
