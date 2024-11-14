@@ -49,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
+  preBuild = ''
+    cp config.def.h config.h
+  '';
+
   outputs = [ "out" "man" ];
 
   makeFlags = [
