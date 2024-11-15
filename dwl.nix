@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
   version = "0.7";
 
-  src = ./;
+  src = builtins.path { name = "dwl"; path = ./.; };
 
   nativeBuildInputs = [
     installShellFiles
