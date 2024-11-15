@@ -24,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = builtins.fetchGit {
     url =  ./.;
     ref = "v${finalAttrs.version}";
+    rev = "5a4839b1c8e1b171441a86a379ef30ddfb687421"; # get this using `git rev-list -n 1 v<VERSION>`
   };
 
   nativeBuildInputs = [
