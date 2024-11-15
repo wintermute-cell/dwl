@@ -22,9 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.6";
 
   src = builtins.fetchGit {
-    url =  "file://./.";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-U/vqGE1dJKgEGTfPMw02z5KJbZLWY1vwDJWnJxT8urM=";
+    url =  ./.;
+    ref = "v${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
