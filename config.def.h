@@ -7,15 +7,22 @@
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const unsigned int borderpx         = 3;  /* border pixel of windows */
-static const float rootcolor[]             = COLOR(0x222222ff);
-static const float bordercolor[]           = COLOR(0x444444ff);
-static const float focuscolor[]            = COLOR(0x005577ff);
-static const float urgentcolor[]           = COLOR(0xff0000ff);
+static const int showbar                   = 1; /* 0 means no bar */
+static const int topbar                    = 1; /* 0 means bottom bar */
+static const char *fonts[]                 = {"monospace:size=10"};
+static const float rootcolor[]             = COLOR(0x000000ff);
 /* This conforms to the xdg-protocol. Set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You can also use glsl colors */
 
-/* tagging - TAGCOUNT must be no greater than 31 */
-#define TAGCOUNT (9)
+static uint32_t colors[][3]                = {
+	/*               fg          bg          border    */
+	[SchemeNorm] = { 0xbbbbbbff, 0x222222ff, 0x444444ff },
+	[SchemeSel]  = { 0xeeeeeeff, 0x005577ff, 0x005577ff },
+	[SchemeUrg]  = { 0,          0,          0x770000ff },
+};
+ 
+ /* tagging - No more than 31 tags! */
+static char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 /* logging */
 static int log_level = WLR_ERROR;
@@ -160,13 +167,15 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_m,          setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                    XKB_KEY_space,      setlayout,      {0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,      togglefloating, {0} },
-	{ MODKEY,                    XKB_KEY_e,         togglefullscreen, {0} },
+	{ MODKEY,                    XKB_KEY_e,          togglefullscreen,{0} },
 	{ MODKEY,                    XKB_KEY_0,          view,           {.ui = ~0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_parenright, tag,            {.ui = ~0} },
 	{ MODKEY,                    XKB_KEY_comma,      focusmon,       {.i = WLR_DIRECTION_LEFT} },
 	{ MODKEY,                    XKB_KEY_period,     focusmon,       {.i = WLR_DIRECTION_RIGHT} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_less,       tagmon,         {.i = WLR_DIRECTION_LEFT} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_greater,    tagmon,         {.i = WLR_DIRECTION_RIGHT} },
+
+	{ MODKEY,                    XKB_KEY_b,          togglebar,      {0} },
 	TAGKEYS(          XKB_KEY_1, XKB_KEY_exclam,                     0),
 	TAGKEYS(          XKB_KEY_2, XKB_KEY_at,                         1),
 	TAGKEYS(          XKB_KEY_3, XKB_KEY_numbersign,                 2),
@@ -189,7 +198,15 @@ static const Key keys[] = {
 };
 
 static const Button buttons[] = {
-	{ MODKEY, BTN_LEFT,   moveresize,     {.ui = CurMove} },
-	{ MODKEY, BTN_MIDDLE, togglefloating, {0} },
-	{ MODKEY, BTN_RIGHT,  moveresize,     {.ui = CurResize} },
+ 	{ ClkLtSymbol, 0,      BTN_LEFT,   setlayout,      {.v = &layouts[0]} },
+ 	{ ClkLtSymbol, 0,      BTN_RIGHT,  setlayout,      {.v = &layouts[2]} },
+ 	{ ClkTitle,    0,      BTN_MIDDLE, zoom,           {0} },
+ 	{ ClkStatus,   0,      BTN_MIDDLE, spawn,          {.v = termcmd} },
+ 	{ ClkClient,   MODKEY, BTN_LEFT,   moveresize,     {.ui = CurMove} },
+ 	{ ClkClient,   MODKEY, BTN_MIDDLE, togglefloating, {0} },
+ 	{ ClkClient,   MODKEY, BTN_RIGHT,  moveresize,     {.ui = CurResize} },
+ 	{ ClkTagBar,   0,      BTN_LEFT,   view,           {0} },
+ 	{ ClkTagBar,   0,      BTN_RIGHT,  toggleview,     {0} },
+ 	{ ClkTagBar,   MODKEY, BTN_LEFT,   tag,            {0} },
+ 	{ ClkTagBar,   MODKEY, BTN_RIGHT,  toggletag,      {0} },
 };
