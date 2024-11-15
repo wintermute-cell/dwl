@@ -6,7 +6,7 @@
 /* appearance */
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
-static const unsigned int borderpx         = 1;  /* border pixel of windows */
+static const unsigned int borderpx         = 2;  /* border pixel of windows */
 static const float rootcolor[]             = COLOR(0x222222ff);
 static const float bordercolor[]           = COLOR(0x444444ff);
 static const float focuscolor[]            = COLOR(0x005577ff);
@@ -48,6 +48,8 @@ static const MonitorRule monrules[] = {
 	{ "eDP-1",    0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 	*/
 	/* defaults */
+    { "DP-3",     0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+    { "HDMI-A-0", 0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 2560,   0 },
 	{ NULL,       0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 };
 
@@ -57,17 +59,17 @@ static const struct xkb_rule_names xkb_rules = {
 	/* example:
 	.options = "ctrl:nocaps",
 	*/
-	.options = NULL,
+	.options = "caps:escape_shifted_capslock",
 };
 
-static const int repeat_rate = 25;
-static const int repeat_delay = 600;
+static const int repeat_rate = 50;
+static const int repeat_delay = 300;
 
 /* Trackpad */
 static const int tap_to_click = 1;
 static const int tap_and_drag = 1;
 static const int drag_lock = 1;
-static const int natural_scrolling = 0;
+static const int natural_scrolling = 1;
 static const int disable_while_typing = 1;
 static const int left_handed = 0;
 static const int middle_button_emulation = 0;
@@ -121,16 +123,33 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 /* commands */
 static const char *termcmd[] = { "alacritty", NULL };
 static const char *menucmd[] = { "fuzzel", NULL };
+// bindsym $mod+a exec "~/scripts/desktop_environment/audiomenu.sh"
+// bindsym $mod+0 exec "~/scripts/desktop_environment/powermenu.sh"
+// bindsym Print exec grimshot copy area
+// bindsym $mod+Print exec wf-recorder --file "$HOME/Videos/recording_$(date +%d_%m_%y-%H:%M:%S).mp4" -g "$(slurp)" -r 144 -x yuv420p  --audio=alsa_output.usb-Focusrite_Scarlett_Solo_USB-00.HiFi__hw_USB_1__sink.monitor
+// bindsym $mod+Shift+Print exec killall -s SIGINT wf-recorder
+static const char *audiomenu[] = { "~/scripts/desktop_environment/audiomenu.sh", NULL };
+static const char *powermenu[] = { "~/scripts/desktop_environment/powermenu.sh", NULL };
+static const char *screenshot[] = { "grimshot", "copy", "area", NULL };
+static const char *record[] = { "wf-recorder", "--file", "$HOME/Videos/recording_$(date +%d_%m_%y-%H:%M:%S).mp4", "-g", "$(slurp)", "-r", "144", "-x", "yuv420p", "--audio=alsa_output.usb-Focusrite_Scarlett_Solo_USB-00.HiFi__hw_USB_1__sink.monitor", NULL };
+static const char *stoprecord[] = { "killall", "-s", "SIGINT", "wf-recorder", NULL };
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
 	/* modifier                  key                 function        argument */
 	{ MODKEY,                    XKB_KEY_p,          spawn,          {.v = menucmd} },
 	{ MODKEY,                    XKB_KEY_Return,     spawn,          {.v = termcmd} },
+
+    { MODKEY,                    XKB_KEY_a,          spawn,          {.v = audiomenu} },
+    { MODKEY,                    XKB_KEY_0,          spawn,          {.v = powermenu} },
+    { 0,                         XKB_KEY_Print,      spawn,          {.v = screenshot} },
+    { MODKEY,                    XKB_KEY_Print,      spawn,          {.v = record} },
+    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Print,      spawn,          {.v = stoprecord} },
+
 	{ MODKEY,                    XKB_KEY_j,          focusstack,     {.i = +1} },
 	{ MODKEY,                    XKB_KEY_k,          focusstack,     {.i = -1} },
-	{ MODKEY,                    XKB_KEY_i,          incnmaster,     {.i = +1} },
-	{ MODKEY,                    XKB_KEY_d,          incnmaster,     {.i = -1} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_i,          incnmaster,     {.i = +1} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_d,          incnmaster,     {.i = -1} },
 	{ MODKEY,                    XKB_KEY_h,          setmfact,       {.f = -0.05f} },
 	{ MODKEY,                    XKB_KEY_l,          setmfact,       {.f = +0.05f} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     zoom,           {0} },
