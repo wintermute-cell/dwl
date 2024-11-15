@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchFromGitea
 , installShellFiles
 , libX11
 , libinput
@@ -12,7 +11,7 @@
 , wayland-scanner
 , wayland
 , wayland-protocols
-, wlroots_0_18
+, wlroots_0_17
 , writeText
 , xcbutilwm
 , xwayland
@@ -20,9 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
-  version = "0.7";
+  version = "0.6";
 
-  src = builtins.path { name = "dwl"; path = ./.; };
+  src = builtins.fetchGit {
+    url =  "file://./.";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-U/vqGE1dJKgEGTfPMw02z5KJbZLWY1vwDJWnJxT8urM=";
+  };
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     wayland
     wayland-protocols
-    wlroots_0_18
+    wlroots_0_17
     libX11
     xcbutilwm
     xwayland
